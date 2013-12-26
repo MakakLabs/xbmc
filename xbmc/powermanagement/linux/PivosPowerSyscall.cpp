@@ -25,18 +25,26 @@
 
 CPivosPowerSyscall::CPivosPowerSyscall()
 {
-  if (aml_get_cputype() == 1)
-  {
+#ifdef XBMC_POWERDOWN
     m_CanPowerdown = true;
+#else
+    m_CanPowerdown = false;
+#endif
+#ifdef XBMC_SUSPEND
+    m_CanSuspend   = true;
+#else
     m_CanSuspend   = false;
-  }
-  else
-  {
-    m_CanPowerdown = true;
-    m_CanSuspend   = false;
-  }
+#endif
+#ifdef XBMC_HIBERNATE
+  m_CanHibernate = true;
+#else
   m_CanHibernate = false;
+#endif
+#ifdef XBMC_REBOOT
   m_CanReboot    = true;
+#else
+  m_CanReboot    = false;
+#endif
 
   m_OnResume  = false;
   m_OnSuspend = false;
