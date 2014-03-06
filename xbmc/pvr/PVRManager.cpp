@@ -533,6 +533,15 @@ bool CPVRManager::Load(void)
   while (IsInitialising() && m_addons && !m_addons->HasConnectedClients())
     Sleep(50);
 
+  int iTimeout = g_advancedSettings.m_iPVRExtraClientsLoadTimeout;
+  while (IsInitialising() && m_addons && m_addons->ConnectedClientAmount()< m_addons->EnabledClientAmount() && iTimeout > 0)
+  {
+     CLog::Log(LOGDEBUG, "PVRManager: Waiting for %d clients", m_addons->EnabledClientAmount() - m_addons->ConnectedClientAmount());
+     Sleep(50);
+     iTimeout-=50;
+  }
+  CLog::Log(LOGDEBUG, "PVRManager: Connected successfully to %d clients of %d enabled", m_addons->ConnectedClientAmount(), m_addons->EnabledClientAmount());
+
   if (!IsInitialising() || !m_addons || !m_addons->HasConnectedClients())
     return false;
 
